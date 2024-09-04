@@ -44,4 +44,4 @@ Scientific literature identifies 36 such rotation invariant 8-bit code textures.
 ### Putting it all together
 
 To sum up the theoretical notions presented above, the application compiles three different data pipelines for classification:
-1. A data pipeline consisting of 
+1. A data pipeline consisting of raw, unprocessed images from the Cirrus Cumulus Stratus Nimbus (CCSN) Database, which can be visualized <a href="https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/CADDPD" target="_blank">here</a>.
