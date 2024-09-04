@@ -79,3 +79,34 @@ Libraries used for this application:
 The following sections report the performances obtained by:
 - the CNN-based classifier analyzing a database of raw cloud RGB images; 
 - standard ANN-based classifier analyzing a database of base texture descriptors extracted for noise threshold of value 5;
+
+### CNN classifier
+
+<div align = "center">
+  
+| Validation Accuracy [%] | Train time [s] | Validation Loss | Model Size [kparams/MB] |
+|:-----------------------:|:--------------:|:---------------:|:-----------------------:|
+|   95.31                 |   159          |  0.244          |  $$4.73*10^6$$ / 18.04  |
+  
+   <br>
+   <p align ="center"><i> Optimal CNN classifier training performance table </i></p>
+</div>
+<br>
+
+<br>
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/0badb2d2-86d7-4359-85c2-7cce49247c46" alt="conf_matrix_CNN" width = "712" height = "290"/>
+  <p align ="center"><i> Training performances of the CNN classifier </i></p>
+</div>
+
+
+
+
+
+<br>
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/1766512d-f0e5-4a5b-b1dd-505cec1624f3" alt="conf_matrix_CNN" width = "800" height = "382"/>
+  <p align ="center"><i> Confusion matrix for the optimal CNN classifier </i></p>
+</div>
+<br>
+
