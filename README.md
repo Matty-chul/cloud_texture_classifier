@@ -80,11 +80,14 @@ The following sections report the performances obtained by:
 - the CNN-based classifier analyzing a database of raw cloud RGB images; 
 - standard ANN-based classifier analyzing a database of base texture descriptors extracted for noise threshold of value 5;
 
+Architectures of discussed classifiers can be consulted in the training notebook. All architectures employ a Softmax classifier on the last layer for predicting trust intervals. The CNN classifier is trained over 40 epochs, while the LTP base texture classifier is trained over 80. Starting learning rate is 0.0001 and is adjusted via the Adam optimizer.
+
 ### CNN classifier
 
+The designated CNN architecture showed exceptional results during training, boasting a less than 5% rate of error and a relatively modest model size for its caliber. 
 <div align = "center">
   
-| Validation Accuracy [%] | Train time [s] | Validation Loss | Model Size [kparams/MB] |
+| Validation Accuracy [%] | Train time [s] | Validation Loss | Model Size [params/MB] |
 |:-----------------------:|:--------------:|:---------------:|:-----------------------:|
 |   95.31                 |   159          |  0.244          |  $$4.73*10^6$$ / 18.04  |
   
@@ -93,15 +96,15 @@ The following sections report the performances obtained by:
 </div>
 <br>
 
+By charting the training performance graphs, we can notice that the classifier achieves proper generalization of the cloud texture features, while also maintaining a good rate of convergence towards the optimal solution.
+
 <br>
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/0badb2d2-86d7-4359-85c2-7cce49247c46" alt="conf_matrix_CNN" width = "712" height = "290"/>
+  <img src="https://github.com/user-attachments/assets/0badb2d2-86d7-4359-85c2-7cce49247c46" alt="train_CNN" width = "712" height = "290"/>
   <p align ="center"><i> Training performances of the CNN classifier </i></p>
 </div>
 
-
-
-
+Taking it a step further, the confusion matrix communicates valuable information as to where a mistake would occur during erroneous prediction cases:
 
 <br>
 <div align="center">
@@ -109,4 +112,75 @@ The following sections report the performances obtained by:
   <p align ="center"><i> Confusion matrix for the optimal CNN classifier </i></p>
 </div>
 <br>
+
+There seems to be no clear pattern of confusion, and the reduced scale of the database (2543 images) as well as the test set, deem this analysis inconclusive. The varying percentages of mispredicted examples in each class category, even though the effective number of mispredicted samples is the same, are determined by the size of a particular class. Intuitively, classes with fewer test samples will give more weight per test sample when evaluating performance metrics. This inter-class imbalance is addressed when computing micro- and macro- averaged performance metrics.
+
+<br>
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/8e3c09c5-9fc0-4b5e-8034-3f8063d8f62d" alt="class_CNN"/>
+  <p align ="center"><i> Performance table evaluating CNN metrics per class<br>(as shown in console output) </i></p>
+</div>
+<br>
+
+F1-score is used as a measure of definitive efficacy of the analysed classifier. As it can be observed, most classes report prediction efficencies higher than 97% in the case of the CNN classifier.
+
+<br>
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/285a4511-e6b2-48ed-ae65-aa8fbe836df0" alt="micro_macro_CNN"/>
+  <p align ="center"><i> Performance table evaluating CNN micro- and macro-averaged metrics<br>(as shown in console output) </i></p>
+</div>
+<br>
+
+Micro- and macro- averaged values are used in order to quantify the general efficacy of the classifier.
+
+### Base LTP texture classifier
+
+<div align = "center">
+  
+| Validation Accuracy [%] | Train time [s] | Validation Loss | Model Size [params/KB]   |
+|:-----------------------:|:--------------:|:---------------:|:------------------------:|
+|   26.71                 |   2.8          |  2.069          |  101,435 / 396.23        |
+  
+   <br>
+   <p align ="center"><i> Optimal LTP texture classifier (noise threshold 5) training performance table </i></p>
+</div>
+<br>
+
+<br>
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/995119a6-d903-451c-88c7-9f09cd023b93" alt="train_LTP" width = "712" height = "290"/>
+  <p align ="center"><i> Training performances of the optimal LTP texture classifier (noise threshold 5) </i></p>
+</div>
+
+
+<br>
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/abde5637-029a-49bd-af1a-e5805a43e86a" alt="conf_matrix_LTP" width = "800" height = "382"/>
+  <p align ="center"><i> Confusion matrix for the optimal LTP texture classifier (noise threshold 5) </i></p>
+</div>
+<br>
+
+<br>
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/fb82c4ae-db32-4e10-8a03-752e1300fdee" alt="class_CNN" width = "410" height="481"/>
+  <p align ="center"><i> Performance table evaluating LTP metrics per class<br>(as shown in console output) </i></p>
+</div>
+<br>
+
+
+<br>
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/5eeddf7f-2d23-4dd7-9de1-a3efc4cc8f63" alt="micro_macro_CNN" />
+  <p align ="center"><i> Performance table evaluating LTP micro- and macro-averaged metrics<br>(as shown in console output) </i></p>
+</div>
+<br>
+
+
+
+
+
+
+![LTP_BASE_NOISE_5_ITERATION_0]()
+
+
 
