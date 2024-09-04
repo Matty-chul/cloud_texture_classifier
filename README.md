@@ -59,7 +59,7 @@ The image presented above illustrates the fashion in which the extracted code te
 
 The code textures were extracted using Local Ternary Patterns for the following noise thresholds {0,2,5}, with the latter being the recommended value in documentation. This results in 3 different base texture databases. By factoring in their texture invariant counterparts and the original image database, the application compiles 7 different classifiers: one CNN-based classifier being trained on raw images and six other standard ANN-based classifiers being trained on refined texture descriptors.
 
-Two architectures have been developed with the basic ANN classifiers sharing the same architecture, the only notable difference being the input shape according to the input vector used.
+Two architectures have been developed with the basic ANN classifiers sharing the same architecture, the only notable difference being the input shape according to the input vector used. Dropout layers were experimented with, but ultimately did not improve final results and as such both architectures retain only basic layers.
 
 The CCSN database mentioned above identifies 11 object classes constisting of different cloud topologies: altocumulus (Ac), altostratus (As), cirrus (Ci), cirrostratus (Cs), cirrocumulus (Cc), cumulus (Cu), Cumulonimbus (Cb), Nimbostratus (Ns) , stratocumulus (Sc), stratus (St) and contrail (Ct) (short for condensation trail), the latter being an unconventional class type because it describes artificially formed clouds by aircraft engines.
 
@@ -73,3 +73,9 @@ Libraries used for this application:
 - **numpy**, used for data shuffling and debugging;
 - **sklearn**, used for calculating performance metrics and data scaling;
 - **os** and **cv2** libraries for browsing and accessing input data.
+
+## Application Showcase
+
+The following sections report the performances obtained by:
+- the CNN-based classifier analyzing a database of raw cloud RGB images; 
+- standard ANN-based classifier analyzing a database of base texture descriptors extracted for noise threshold of value 5;
