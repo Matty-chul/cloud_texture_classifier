@@ -65,6 +65,10 @@ The CCSN database mentioned above identifies 11 object classes constisting of di
 
 The code application is split into two separate Jupyter notebooks: one for training an ANN model from scratch and one for evaluating the optimized versions of the ANN models. The performance evaluation is done by first plotting relevant accuracy/loss graphs during the training phase and then calculating performance metrics of a given classifier on test time, meant to measure its efficiency, as well as plot the associated confusion matrix. The system calculates per-class, as well as micro- and macro-averaged values of Precision, Recall and F1-score. The accuracy/loss graphs are not stored and as such are exclusive to the session of the training notebook.
 
+The best version of the algorithm developed for extracting the cloud textures is computationally expensive ( $$O(n^2)$$ complexity due to the fact that the whole image needs to be iterated over and the vast majority of the database images are 400x400 pixels in size) and each run took roughly five hours per code texture extraction. The code textures needed to be pre-emptively stored for ease of access and loading into memory before traning and testing runtimes. 
+
+This was done so by developing a separate file extraction procedure in Google Colaboratory, where I mounted my personal Google Drive containing the already loaded up raw database of images and extracting each class to a specific noise threshold file, formatted as binary. By doing so, squbsequently, the time required for loading the appropiate code texture database into memory shortened itself down to half a minute.
+
 The development platform chosen for this project was Kaggle, due to its Machine Learning-oriented features, which helped particularly during the training phases of the CNN classifier via graphical accelerators. This was used in conjuction with Google Colaboratory, which served exclusively towards the extraction of the texture descriptors because of a much more accessible file system and lenient timeout sessions.
 
 Libraries used for this application:
@@ -122,7 +126,7 @@ There seems to be no clear pattern of confusion, and the reduced scale of the da
 </div>
 <br>
 
-F1-score is used as a measure of definitive efficacy of the analysed classifier. As it can be observed, most classes report prediction efficencies higher than 97% in the case of the CNN classifier.
+F1-score is used as a measure of definitive efficacy of the analysed classifier, whether we're evaluating it class-wise or in general. As it can be observed, most classes report prediction efficencies higher than 97% in the case of the CNN classifier.
 
 <br>
 <div align="center">
@@ -131,9 +135,11 @@ F1-score is used as a measure of definitive efficacy of the analysed classifier.
 </div>
 <br>
 
-Micro- and macro- averaged values are used in order to quantify the general efficacy of the classifier.
+Micro- and macro- averaged values are used in order to quantify the general efficacy of the classifier, and as mentioned before, they handle class imbalances. Micro-averaged values better reflect the efficacy of the classes with more samples, while macro-averaged values better reflect the efficacy of the classes with fewer samples. Due to the fact that the test samples are relatively evenly distributed across all classes, the differences in values show on a much smaller scale, hence the invariance present in the values above. However, demonstrating this is beyond the scope of quantifying performance.
 
 ### Base LTP texture classifier
+
+Moving on to the base LTP texture classifier, with extracted texture codes given a noise threshold value of 5, the system performs poorly, at best. Preprocessing techniques such as database normalization and standardization did not report an increase in performance. During training, there have been attempts to improve performance architecture-wise by fine-tuning parameters as well as integrating BatchNormalization and Dropout layers, with little effect, going as far as being counterproductive at times. The optimal model version has been documented below.
 
 <div align = "center">
   
@@ -146,12 +152,15 @@ Micro- and macro- averaged values are used in order to quantify the general effi
 </div>
 <br>
 
+By further analysing the training performances, we can notice that the system showcases a rather poor convergence rate and an inability to achieve proper generalization of the classified texture codes.
+
 <br>
 <div align="center">
   <img src="https://github.com/user-attachments/assets/995119a6-d903-451c-88c7-9f09cd023b93" alt="train_LTP" width = "712" height = "290"/>
   <p align ="center"><i> Training performances of the optimal LTP texture classifier (noise threshold 5) </i></p>
 </div>
 
+These reports are relevant for all code texture classifiers, both base and rotation invariant, with slight performance differences. Although per-class performances may vary strongly depending on the noise threshold value selected, all classifiers report roughly the same micro- and macro- averaged values.
 
 <br>
 <div align="center">
@@ -160,6 +169,8 @@ Micro- and macro- averaged values are used in order to quantify the general effi
 </div>
 <br>
 
+As it can be seen above, the noise threshold of value 5 LTP base classifier shows a strong bias towards class Sc and the vast majority of mispredictions is directly tied to class Sc.
+
 <br>
 <div align="center">
   <img src="https://github.com/user-attachments/assets/fb82c4ae-db32-4e10-8a03-752e1300fdee" alt="class_CNN" width = "410" height="481"/>
@@ -167,6 +178,7 @@ Micro- and macro- averaged values are used in order to quantify the general effi
 </div>
 <br>
 
+The inability to develop proper generalization of features is even more so outlined in the per-class performance table shown above, with half of the classes reporting no classifying efficacy whatsoever.
 
 <br>
 <div align="center">
@@ -175,12 +187,40 @@ Micro- and macro- averaged values are used in order to quantify the general effi
 </div>
 <br>
 
+## Conclusions
 
+Before proceeding, I want to mention that all proper testing has been conducted on the developed code to ensure the proper functioning of the presented extraction algorithms, so that these conclusions may be valid.
 
+The needs of this coding application have already been met by the CNN classifier, which declared exceptional results. However, the LTP base texture classifier might represent a much better long term solution, should the texture extraction algorithm be optimized. Below I have presented two tables showcasing the pros and cons of both models discussed.
 
+<div align = "center">
+  <p align ="center"><b> CNN Classifier Evaluation </b></p>
+  
+| Pros | Cons | 
+|:----|:----|
+| exceptional performance            | long runtimes
+| robust, well-documented technology | extensive computational resources required
+| beginner-friendly                  | very large in size
 
+</div>
+<br>
 
-![LTP_BASE_NOISE_5_ITERATION_0]()
+<div align = "center">
+  <p align ="center"><b> LTP Classifier Evaluation <br> (noise threshold 5) </b></p>
+  
+| Pros | Cons | 
+|:----|:----|
+| exceptional runtimes on basic hardware           | performs poorly
+| compact size                                     | requires expert fine-tuning and <br> preprocessing techniques
+| analysed data is also reduced in size            | texture extraction requires optimization
 
+</div>
+<br>
 
+The model size of the LTP classifier is even further reduced if we consider its rotation invariant counterpart, down to just 66KB, which makes it even more desirable for future applications. However, there is the fatal issue of performance.
 
+My best educated guess is that a lot of the database's coherence is compromised when the code is being split into positive and negative code textures, as any ternary LTP code texture containing exclusively positive or negative values are all converted to void values. However, this process was implemented according to scientific documentation consulted, so I am assuming that the database needs to be subjected to preprocessing techniques far better than what I can provide. 
+
+One solution would be to never split the code at all and implement a histogram based on the ternary 8-"bit" code, but that would mean each texture descriptor would have to store a total of $$3^8=6561$$ possible 8-"bit" texture codes, which complicates memory allocation a lot and it would more efficient to just switch to a CNN configuration on the raw images at that point.
+
+In summary, the CNN classifier has more than met the standards required for this project, but the LTP classifier presents a lot of potential for research and future applications.
