@@ -13,6 +13,16 @@ The application develops a classifier where the classification criteria is deter
 - A standard classifier using Convolutional Neural Networks (CNN) architecture, which employs special neuron layers called convolutional filters to perform convolutions across the database images and extract the relevant feature pattern;
 - An experimental, more recent classifier using simple Artificial Neural Netowrk (ANN) architecture in which the input database of images is refined into individual vectors of texture codes using Local Ternary Patterns.
 
+Explaining the repository contents:
+- kaggle folder contains **training_classifiers** and **testing_classifiers** notebooks developed using the Kaggle IDE, used for training the designed architectures and test already identified optimal models, respectively;
+- google colab folder contains the **file_extraction_procedure** notebook developed using the Google Colab IDE and represents the code used for extracting textures out of images (more on this aspect in a second), the code is purely demonstrative and does not function on its own ( however, following instructions written in the notebook, it can be configured to run successfully on your personal Google Drive)
+
+Most of the resources have already been made publicly and will be listed here:
+- training_classifiers and testing_classifiers can already be found publicly on kaggle <a href ="https://www.kaggle.com/code/mateiciulei/training-classifiers" target="_blank"> here (training) </a> and <a href = "https://www.kaggle.com/code/mateiciulei/testing-classifiers/edit" target = "_blank"> here (testing) </a>;
+- the CCSN database of images used for this project can also be found <a href = "https://www.kaggle.com/datasets/mateiciulei/ccsn-public" target = "_blank"> here (CSSN_database) </a> (the version loaded on Kaggle);
+- the alternative database of extracted textures can be found <a href = "https://www.kaggle.com/datasets/mateiciulei/descriptori-ltp-ccsn" target ="_blank"> here (LTP_database) </a>;
+- the collection of different optimal models identified can be found <a href = "https://www.kaggle.com/models/mateiciulei/clasificatoare_nori/Keras/optiuni/1" target="_blank"> here (optimal_models) </a>;
+
 ### Extracting Textures Using Local Ternary Patterns
 
 Local Ternary Patterns represent the upgraded, noise-resistant version of Local Binary Patterns. Extracting textures using Local Ternary Patterns involves iterating over all the pixels (excluding borders) within an image and calculating individual texture codes over a given fixed spatial region surrounding the reference pixel, most commonly the 8 contiguous pixels. The texture codes are calculated by substracting the value of the reference pixels from the neighboring pixels and by filtering these results through a three-branch comparator function factoring in a flat noise resistance value, each neighboring pixel gets assigned a value of either 1, 0 or -1. 
@@ -224,3 +234,9 @@ My best educated guess is that a lot of the database's coherence is compromised 
 One solution would be to never split the code at all and implement a histogram based on the ternary 8-"bit" code, but that would mean each texture descriptor would have to store a total of $$3^8=6561$$ possible 8-"bit" texture codes, which complicates memory allocation a lot and it would more efficient to just switch to a CNN configuration on the raw images at that point.
 
 In summary, the CNN classifier has more than met the standards required for this project, but the LTP classifier presents a lot of potential for research and future applications.
+
+## References
+1. Ojala, T., Pietikäinen, M., senior member, IEEE, Mäenpää, T., *Multiresolution Gray-Scale and Rotation Invariant Texture Classification with Local Binary Patterns*, *IEEE Transactions on Pattern Analysis and Machine Intelligence*, vol. 24, no. 7/2002, pp. 971-987 <a href = "https://ieeexplore.ieee.org/abstract/document/1017623" target="_blank"> (link)</a>
+2. Tan, X., Triggs, B., *Enhanced Local Texture Feature Sets for Face Recognition Under Difficult Lighting Conditions*, *IEEE Transactions on Image Processing*, vol. 9, no. 6/2010, pp. 1635-1650 <a href = "https://ieeexplore.ieee.org/abstract/document/5411802" target = "_blank"> (link)</a>
+3.  Zhang, J. L., Liu, P., Zhang, F., & Song, Q. Q. (2018), *CloudNet: Ground-based cloud classification with deep convolutional neural network.*, *Geophysical Research Letters*, vol. 45, pp. 8665–8672.
+ <a href="https://doi.org/10.1029/2018GL077787" target="_blank"> (link)</a>
